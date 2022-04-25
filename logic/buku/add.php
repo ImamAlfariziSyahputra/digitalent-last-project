@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once __DIR__ . './../db-config.php';
+require_once __DIR__ . '/../../db-config.php';
 
 $judul = $_POST['judul'];
 $kategori = $_POST['kategori'];
@@ -20,35 +20,27 @@ $status = $_POST['status'];
 
 $sql = "INSERT INTO books(judul,kategori,pengarang,penerbit,status) VALUES( ? , ? , ? , ? , ? )";
 $statement = $connection->prepare($sql);
-$newData = $statement->execute([$judul, $kategori, $pengarang, $penerbit, $status]);
+$statement->execute([$judul, $kategori, $pengarang, $penerbit, $status]);
+$count = $statement->rowCount();
 
-// var_dump($newData);
+// var_dump($count);
+// exit();
 
-if ($newData === true) {
-  header("Location: ./../buku.php"); //! Redirect to "Home Page"
-  exit();
-} else {
-  echo "Tambah Data Gagal!";
-}
-
-if ($updatedData == true) {
+if ($count == 1) {
   $alert = <<<ALERT
     <script>
       alert('Tambah Data Sucess!');
-      window.location='./../biodata.php'
+      window.location='../../book.php'
     </script>
   ALERT;
 
   echo $alert;
   exit();
-
-  // header("Location: ./../home.php"); //! Redirect to "Home Page"
-  // exit();
 } else {
   $alert = <<<ALERT
     <script>
       alert('Tambah Data Gagal!');
-      window.location='./../add.php'
+      window.location='../../book-add.php'
     </script>
   ALERT;
 

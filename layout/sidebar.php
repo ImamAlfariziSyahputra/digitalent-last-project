@@ -13,19 +13,15 @@
     <!-- End Side Logo -->
 
     <div class="flex flex-col space-y-4 px-6 pt-4">
-      <div class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all active py-2 text-white hover:text-white">
+      <a href='#' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all active py-2 text-white hover:text-white">
         <div class="w-3/12 text-center">
-          <div>
-            <img src="img/home-w.svg" alt="" class="inline-block w-6 h-6 group-hover:ml-4">
-          </div>
+          <img src="icons/home-w.svg" alt="" class="inline-block w-6 h-6 group-hover:ml-4">
           <!-- <Icon class="!w-6 !h-6 group-hover:!ml-4" /> -->
         </div>
-        <div class="w-9/12">
-          <a class="" href='#'>
-            Dashboard
-          </a>
+        <div class="w-9/12 pt-1">
+          Dashboard
         </div>
-      </div>
+      </a>
       <div class="!mt-8">
         <h1 class="uppercase text-secondary text-sm">Category</h1>
       </div>

@@ -8,6 +8,8 @@
   <title>Document</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
     body {
       background-color: #f7f7f7;
     }
@@ -47,24 +49,13 @@
 <body>
 
   <div class="flex text-primary font-montserrat">
+    <!-- LEFT SIDE -->
     <!-- Sidebar -->
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <!-- END Sidebar -->
 
-    <section class="flex-grow mx-5">
+    <!-- RIGHT SIDE -->
+    <section class="w-full mx-5">
       <!-- Navbar -->
       <?php require_once __DIR__ . '/navbar.php' ?>
       <!-- END Navbar -->
-
-      <!-- Header -->
-      <section>
-        <div class="flex items-center mt-4">
-          <h1 class="text-2xl font-medium pr-4 border-r border-gray-300">
-            Books
-          </h1>
-          <Breadcrumbs />
-        </div>
-      </section>
-      <!-- END Header -->
-
-      <!-- Content -->
