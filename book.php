@@ -33,10 +33,14 @@ $books = $statement->fetchAll();
 <!-- Content -->
 <div class=" bg-white rounded p-5 my-6 border shadow text-sm">
 
-  <div class="flex justify-end">
+  <div class="flex items-center justify-end space-x-3">
+    <button type='button' onclick="printAll();" class="flex space-x-2 items-center bg-yellow-500 hover:bg-yellow-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
+      <img src="icons/print-w.svg" alt="" class="w-4">
+      <span>Cetak</span>
+    </button>
     <a href='book-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
       <img src="icons/plus-w.svg" alt="" class="w-4">
-      <span>New Post</span>
+      <span>Tambah</span>
     </a>
   </div>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -85,6 +89,8 @@ $books = $statement->fetchAll();
               <?= $book['status'] ?>
             </th>
             <td class="flex justify-content-evenly items-center space-x-1.5 py-4">
+              <button type="button" onclick="printSingle(<?= $book['id'] ?>)" class="bg-yellow-500 hover:bg-yellow-600 py-1.5 px-2.5 rounded font-medium text-white">Cetak</button>
+              <span> - </span>
               <a href="book-edit.php?id=<?= $book['id'] ?>" class="bg-green-600 hover:bg-green-700 py-1.5 px-2.5 rounded font-medium text-white">Edit</a>
               <span> - </span>
               <form action="logic/buku/delete.php" method="POST">
@@ -103,3 +109,17 @@ $books = $statement->fetchAll();
 <!-- END Content -->
 
 <?php require_once __DIR__ . '/layout/bottom.php' ?>
+
+<script>
+  function printAll() {
+    let printWindow = window.open('http://localhost:3000/project/tugas-akhir/print/book-all.php', '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+
+    printWindow.print();
+  }
+
+  function printSingle(id) {
+    let printWindow = window.open(`http://localhost:3000/project/tugas-akhir/print/book-single.php?id=${id}`, '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+
+    printWindow.print();
+  }
+</script>
