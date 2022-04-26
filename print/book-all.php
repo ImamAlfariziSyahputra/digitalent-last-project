@@ -1,21 +1,26 @@
 <?php
 session_start();
 
-// if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
-require_once __DIR__ . '/../db-config.php';
+if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+  require_once __DIR__ . '/../db-config.php';
 
-$sql = "SELECT * FROM books ORDER BY id DESC";
-$statement = $connection->prepare($sql);
-$statement->execute();
+  $sql = "SELECT * FROM books ORDER BY id DESC";
+  $statement = $connection->prepare($sql);
+  $statement->execute();
 
-$books = $statement->fetchAll();
+  $books = $statement->fetchAll();
+} else {
+  $alert = <<<ALERT
+    <script>
+      alert('Login Terlebih Dahulu, Untuk Mengakses Halaman Web!');
+      window.location='../auth/login.php';
+    </script>
+  ALERT;
 
-// var_dump($books);
-// exit();
-// } else {
-//   header("Location: login.php"); //! if Unauthenticated, Redirect to "Login Page"
-//   exit();
-// }
+  echo $alert;
+  exit();
+}
+
 ?>
 
 <!DOCTYPE html>

@@ -1,14 +1,18 @@
 <?php
 session_start();
 
-// if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+} else {
+  $alert = <<<ALERT
+    <script>
+      alert('Login Terlebih Dahulu, Untuk Mengakses Halaman Web!');
+      window.location='auth/login.php';
+    </script>
+  ALERT;
 
-// var_dump($books);
-// exit();
-// } else {
-//   header("Location: login.php"); //! if Unauthenticated, Redirect to "Login Page"
-//   exit();
-// }
+  echo $alert;
+  exit();
+}
 ?>
 
 <?php require_once __DIR__ . '/layout/top.php' ?>
@@ -32,7 +36,7 @@ session_start();
 <div class="bg-white rounded p-5 my-6 border shadow text-sm">
 
 
-  <form action="logic/buku/add.php" method="POST">
+  <form action="logic/buku/add.php" method="POST" id="form">
     <div class="w-full flex flex-wrap items-center mx-auto space-y-6">
       <div class="w-full flex items-center space-x-8">
         <div class="w-6/12">
@@ -82,7 +86,7 @@ session_start();
         <a href="book.php" class="inline-block border bg-yellow-400 hover:bg-yellow-500 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
           Kembali
         </a>
-        <button class="border bg-red-500 hover:bg-red-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
+        <button type="button" onclick="reset();" class="border bg-red-500 hover:bg-red-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
           Ulang
         </button>
         <button class="border bg-blue-500 hover:bg-blue-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white" type='submit'>
@@ -98,3 +102,9 @@ session_start();
 <!-- END Content -->
 
 <?php require_once __DIR__ . '/layout/bottom.php' ?>
+
+<script>
+  function reset() {
+    document.getElementById("form").reset();
+  }
+</script>

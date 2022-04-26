@@ -1,21 +1,50 @@
 <?php
 session_start();
 
-$id = $_GET['id'];
+if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+  if (!isset($_GET['id'])) {
+    $alert = <<<ALERT
+      <script>
+        alert('Buku yang ingin dicetak tidak ditemukan!');
+        window.location='../book.php'
+      </script>
+    ALERT;
 
-// if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
-require_once __DIR__ . '/../db-config.php';
+    echo $alert;
+    exit();
+  }
 
-$sql = "SELECT * FROM books WHERE id = ?";
-$statement = $connection->prepare($sql);
-$statement->execute([$id]);
+  $id = $_GET['id'];
 
-if ($book = $statement->fetch()) {
+  require_once __DIR__ . '/../db-config.php';
+
+  $sql = "SELECT * FROM books WHERE id = ?";
+  $statement = $connection->prepare($sql);
+  $statement->execute([$id]);
+
+  if ($book = $statement->fetch()) {
+    $id = $book['id'];
+    $judul = $book['judul'];
+    $kategori = $book['kategori'];
+    $pengarang = $book['pengarang'];
+    $penerbit = $book['penerbit'];
+    $status = $book['status'];
+  } else {
+    $alert = <<<ALERT
+      <script>
+        alert('Data tersebut tidak ditemukan!');
+        window.location='../book.php'
+      </script>
+    ALERT;
+
+    echo $alert;
+    exit();
+  }
 } else {
   $alert = <<<ALERT
     <script>
-      alert('Data tersebut tidak ditemukan!');
-      window.location='../../book.php'
+      alert('Login Terlebih Dahulu, Untuk Mengakses Halaman Web!');
+      window.location='../auth/login.php';
     </script>
   ALERT;
 
@@ -23,12 +52,6 @@ if ($book = $statement->fetch()) {
   exit();
 }
 
-// var_dump($books);
-// exit();
-// } else {
-//   header("Location: login.php"); //! if Unauthenticated, Redirect to "Login Page"
-//   exit();
-// }
 ?>
 
 <!DOCTYPE html>
@@ -42,55 +65,72 @@ if ($book = $statement->fetch()) {
   <style id="table_style" type="text/css">
     body {
       font-family: Arial;
-      font-size: 10pt;
+      font-size: 1rem;
     }
 
-    table {
+    /* table {
       border: 1px solid #ccc;
       border-collapse: collapse;
-    }
+    } */
 
     table th {
-      background-color: #F7F7F7;
+      /* background-color: #F7F7F7; */
       color: #333;
       font-weight: bold;
-      padding: 0.8rem;
-      text-align: center;
+      padding: 0.3rem;
+      text-align: left;
     }
 
     table td {
-      padding: 0.7rem;
+      padding: 0.3rem;
     }
 
-    table td:nth-child(1) {
+    /* table td:nth-child(1) {
       text-align: center;
-    }
+    } */
 
-    table th,
+    /* table th,
     table td {
       border: 1px solid #ccc;
-    }
+    } */
   </style>
 </head>
 
 <body>
   <div id="tableWrapper">
-    <table cellspacing="0" rules="all" border="1">
+    <h1>Data Buku : <?= $judul ?></h1>
+
+    <table>
       <tr>
-        <th>ID</th>
-        <th>Judul Buku</th>
-        <th>Kategori</th>
-        <th>Pengarang</th>
-        <th>Penerbit</th>
-        <th>Status</th>
+        <th>ID Buku</th>
+        <td>:</td>
+        <td><?= $id ?></td>
       </tr>
       <tr>
-        <td><?= $book['id'] ?></td>
-        <td><?= $book['judul'] ?></td>
-        <td><?= $book['kategori'] ?></td>
-        <td><?= $book['pengarang'] ?></td>
-        <td><?= $book['penerbit'] ?></td>
-        <td><?= $book['status'] ?></td>
+      <tr>
+        <th>Judul Buku</th>
+        <td>:</td>
+        <td><?= $judul ?></td>
+      </tr>
+      <tr>
+        <th>Kategori</th>
+        <td>:</td>
+        <td><?= $kategori ?></td>
+      </tr>
+      <tr>
+        <th>Pengarang</th>
+        <td>:</td>
+        <td><?= $pengarang ?></td>
+      </tr>
+      <tr>
+        <th>Penerbit</th>
+        <td>:</td>
+        <td><?= $penerbit ?></td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>:</td>
+        <td><?= $status ?></td>
       </tr>
     </table>
   </div>

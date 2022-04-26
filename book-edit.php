@@ -1,40 +1,56 @@
 <?php
 session_start();
 
-// if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
+  require_once __DIR__ . '/db-config.php';
 
-require_once __DIR__ . '/db-config.php';
+  if (isset($_GET['id'])) {
+    $id = $_GET['id'];
 
-$id = $_GET['id'];
+    $sql = "SELECT * FROM books WHERE id = ?";
+    $statement = $connection->prepare($sql);
+    $statement->execute([$id]);
 
-$sql = "SELECT * FROM books WHERE id = ?";
-$statement = $connection->prepare($sql);
-$statement->execute([$id]);
+    if ($row = $statement->fetch()) {
+      $judul = $row['judul'];
+      $kategori = $row['kategori'];
+      $pengarang = $row['pengarang'];
+      $penerbit = $row['penerbit'];
+      $status = $row['status'];
+    } else {
+      $alert = <<<ALERT
+        <script>
+          alert('Data yang ingin di edit tidak ditemukan!');
+          window.location='book.php';
+        </script>
+      ALERT;
 
-if ($row = $statement->fetch()) {
-  $judul = $row['judul'];
-  $kategori = $row['kategori'];
-  $pengarang = $row['pengarang'];
-  $penerbit = $row['penerbit'];
-  $status = $row['status'];
+      echo $alert;
+      exit();
+    }
+  } else {
+    $alert = <<<ALERT
+        <script>
+          alert('Data yang ingin di edit tidak ditemukan!');
+          window.location='book.php';
+        </script>
+      ALERT;
+
+    echo $alert;
+    exit();
+  }
 } else {
   $alert = <<<ALERT
-      <script>
-        alert('Data yang ingin di edit tidak ditemukan!');
-        window.location='book.php';
-      </script>
-    ALERT;
+    <script>
+      alert('Login Terlebih Dahulu, Untuk Mengakses Halaman Web!');
+      window.location='auth/login.php';
+    </script>
+  ALERT;
 
   echo $alert;
   exit();
 }
 
-// var_dump($books);
-// exit();
-// } else {
-//   header("Location: login.php"); //! if Unauthenticated, Redirect to "Login Page"
-//   exit();
-// }
 ?>
 
 <?php require_once __DIR__ . '/layout/top.php' ?>
@@ -58,7 +74,7 @@ if ($row = $statement->fetch()) {
 <div class="bg-white rounded p-5 my-6 border shadow text-sm">
 
 
-  <form action="logic/buku/edit.php" method="POST">
+  <form action="logic/buku/edit.php" method="POST" id="form">
     <input type="text" class="hidden" name='id' value='<?= $id ?>'>
     <div class="w-full flex flex-wrap items-center mx-auto space-y-6">
       <div class="w-full flex items-center space-x-8">
@@ -109,7 +125,7 @@ if ($row = $statement->fetch()) {
         <a href="book.php" class="border bg-yellow-400 hover:bg-yellow-500 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
           Kembali
         </a>
-        <button type="button" class="border bg-red-500 hover:bg-red-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
+        <button type="button" onclick="reset();" class="border bg-red-500 hover:bg-red-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
           Ulang
         </button>
         <button class="border bg-blue-500 hover:bg-blue-600 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white" type='submit'>
@@ -125,3 +141,10 @@ if ($row = $statement->fetch()) {
 <!-- END Content -->
 
 <?php require_once __DIR__ . '/layout/bottom.php' ?>
+
+<script>
+  function reset() {
+    console.log('clicked');
+    let form = document.getElementById("form").reset();
+  }
+</script>
