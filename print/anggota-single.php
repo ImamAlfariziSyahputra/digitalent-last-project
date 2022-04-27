@@ -6,7 +6,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
     $alert = <<<ALERT
       <script>
         alert('Data yang ingin dicetak tidak ditemukan!');
-        window.location='../book.php'
+        window.location='../anggota.php'
       </script>
     ALERT;
 
@@ -18,22 +18,22 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
 
   require_once __DIR__ . '/../db-config.php';
 
-  $sql = "SELECT * FROM books WHERE id = ?";
+  $sql = "SELECT * FROM anggota WHERE id = ?";
   $statement = $connection->prepare($sql);
   $statement->execute([$id]);
 
-  if ($book = $statement->fetch()) {
-    $id = $book['id'];
-    $judul = $book['judul'];
-    $kategori = $book['kategori'];
-    $pengarang = $book['pengarang'];
-    $penerbit = $book['penerbit'];
-    $status = $book['status'];
+  if ($anggota = $statement->fetch()) {
+    $id = $anggota['id'];
+    $nama = $anggota['nama'];
+    $gender = $anggota['gender'];
+    $alamat = $anggota['alamat'];
+    $status = $anggota['status'];
+    $foto = $anggota['foto'];
   } else {
     $alert = <<<ALERT
       <script>
         alert('Data tersebut tidak ditemukan!');
-        window.location='../book.php'
+        window.location='../anggota.php'
       </script>
     ALERT;
 
@@ -98,39 +98,39 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
 
 <body>
   <div id="tableWrapper">
-    <h1>Data Buku : <?= $judul ?></h1>
+    <h1>Data Anggota : <?= $nama ?></h1>
 
     <table>
       <tr>
-        <th>ID Buku</th>
+        <th>ID Anggota</th>
         <td>:</td>
         <td><?= $id ?></td>
       </tr>
       <tr>
       <tr>
-        <th>Judul Buku</th>
+        <th>Nama</th>
         <td>:</td>
-        <td><?= $judul ?></td>
+        <td><?= $nama ?></td>
       </tr>
       <tr>
-        <th>Kategori</th>
+        <th>Jenis Kelamin</th>
         <td>:</td>
-        <td><?= $kategori ?></td>
+        <td><?= $gender ?></td>
       </tr>
       <tr>
-        <th>Pengarang</th>
+        <th>Alamat</th>
         <td>:</td>
-        <td><?= $pengarang ?></td>
-      </tr>
-      <tr>
-        <th>Penerbit</th>
-        <td>:</td>
-        <td><?= $penerbit ?></td>
+        <td><?= $alamat ?></td>
       </tr>
       <tr>
         <th>Status</th>
         <td>:</td>
         <td><?= $status ?></td>
+      </tr>
+      <tr>
+        <th>Foto</th>
+        <td>:</td>
+        <td><?= $foto ?></td>
       </tr>
     </table>
   </div>

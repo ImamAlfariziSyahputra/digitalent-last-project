@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
-  if (!isset($_GET['id'])) {
+if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
+  if (empty($_GET['id'])) {
     $alert = <<<ALERT
       <script>
         alert('Data yang ingin dicetak tidak ditemukan!');
-        window.location='../book.php'
+        window.location='../peminjaman.php'
       </script>
     ALERT;
 
@@ -18,22 +18,31 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
 
   require_once __DIR__ . '/../db-config.php';
 
-  $sql = "SELECT * FROM books WHERE id = ?";
+  $sql = <<<SQL
+    SELECT peminjaman.*, 
+    anggota.nama as anggota, 
+    books.judul as buku 
+    FROM peminjaman 
+    INNER JOIN anggota ON peminjaman.anggota_id = anggota.id
+    INNER JOIN books ON peminjaman.book_id = books.id
+    WHERE peminjaman.id = ?
+  SQL;
   $statement = $connection->prepare($sql);
   $statement->execute([$id]);
 
-  if ($book = $statement->fetch()) {
-    $id = $book['id'];
-    $judul = $book['judul'];
-    $kategori = $book['kategori'];
-    $pengarang = $book['pengarang'];
-    $penerbit = $book['penerbit'];
-    $status = $book['status'];
+  if ($peminjaman = $statement->fetch()) {
+    $id = $peminjaman['id'];
+    $anggotaId = $peminjaman['anggota_id'];
+    $anggota = $peminjaman['anggota'];
+    $bookId = $peminjaman['book_id'];
+    $buku = $peminjaman['buku'];
+    $tglPinjam = $peminjaman['tgl_pinjam'];
+    $tglKembali = $peminjaman['tgl_kembali'];
   } else {
     $alert = <<<ALERT
       <script>
         alert('Data tersebut tidak ditemukan!');
-        window.location='../book.php'
+        window.location='../peminjaman.php'
       </script>
     ALERT;
 
@@ -98,39 +107,44 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
 
 <body>
   <div id="tableWrapper">
-    <h1>Data Buku : <?= $judul ?></h1>
+    <h1>Data Peminjaman, Anggota (id) : <?= $anggotaId ?></h1>
 
     <table>
       <tr>
-        <th>ID Buku</th>
+        <th>ID Peminjaman</th>
         <td>:</td>
         <td><?= $id ?></td>
       </tr>
       <tr>
       <tr>
+        <th>ID Anggota</th>
+        <td>:</td>
+        <td><?= $anggotaId ?></td>
+      </tr>
+      <tr>
+        <th>Nama Anggota</th>
+        <td>:</td>
+        <td><?= $anggota ?></td>
+      </tr>
+      <tr>
+        <th>ID Buku</th>
+        <td>:</td>
+        <td><?= $bookId ?></td>
+      </tr>
+      <tr>
         <th>Judul Buku</th>
         <td>:</td>
-        <td><?= $judul ?></td>
+        <td><?= $buku ?></td>
       </tr>
       <tr>
-        <th>Kategori</th>
+        <th>Tanggal Pinjam</th>
         <td>:</td>
-        <td><?= $kategori ?></td>
+        <td><?= $tglPinjam ?></td>
       </tr>
       <tr>
-        <th>Pengarang</th>
+        <th>Tanggal Kembali</th>
         <td>:</td>
-        <td><?= $pengarang ?></td>
-      </tr>
-      <tr>
-        <th>Penerbit</th>
-        <td>:</td>
-        <td><?= $penerbit ?></td>
-      </tr>
-      <tr>
-        <th>Status</th>
-        <td>:</td>
-        <td><?= $status ?></td>
+        <td><?= $tglKembali ?></td>
       </tr>
     </table>
   </div>

@@ -1,8 +1,26 @@
 <?php
 
 require __DIR__ . '/../../db-config.php';
+require_once __DIR__ . '/../requiredFunction.php';
 
 $id = $_POST['id'];
+
+if (empty($_POST['judul'])) {
+  required(name: 'Judul', file: 'book-edit', id: $id);
+}
+if (empty($_POST['kategori'])) {
+  required(name: 'Kategori', file: 'book-edit', id: $id);
+}
+if (empty($_POST['pengarang'])) {
+  required(name: 'Pengarang', file: 'book-edit', id: $id);
+}
+if (empty($_POST['penerbit'])) {
+  required(name: 'Penerbit', file: 'book-edit', id: $id);
+}
+if (empty($_POST['status'])) {
+  required(name: 'Status', file: 'book-edit', id: $id);
+}
+
 $judul = $_POST['judul'];
 $kategori = $_POST['kategori'];
 $pengarang = $_POST['pengarang'];
@@ -12,13 +30,9 @@ $status = $_POST['status'];
 $sql = "UPDATE books SET judul = ?, kategori = ?, pengarang = ?, penerbit = ?, status = ? WHERE id = ?";
 
 $statement = $connection->prepare($sql);
-$statement->execute([$judul, $kategori, $pengarang, $penerbit, $status, $id]);
-$count = $statement->rowCount();
+$updatedData = $statement->execute([$judul, $kategori, $pengarang, $penerbit, $status, $id]);
 
-// var_dump($count);
-// exit();
-
-if ($count == 1) {
+if ($updatedData == true) {
   $alert = <<<ALERT
       <script>
         alert('Update Data Sucess!');
@@ -32,7 +46,7 @@ if ($count == 1) {
   $alert = <<<ALERT
       <script>
         alert('Edit Data Gagal!');
-        window.location='../../book-edit.php?id=<?= $id ?>'
+        window.location='../../book-edit.php?id=$id'
       </script>
     ALERT;
 

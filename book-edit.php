@@ -121,6 +121,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
         </div>
       </div>
 
+      <div class="w-full text-center">
+        <?php if (!empty($_GET['error'])) : ?>
+          <div class="w-max mx-auto my-3 px-3 p-2 bg-[#ffd4d4] rounded text-center">
+            <span class="text-xl text-red-600"><?= $_GET['error'] ?></span>
+          </div>
+        <?php endif; ?>
+      </div>
+
       <div class="w-full flex justify-end space-x-4">
         <a href="book.php" class="border bg-yellow-400 hover:bg-yellow-500 rounded border-none py-3 px-6 mb-3 text-lg font-bold text-white">
           Kembali

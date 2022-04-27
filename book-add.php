@@ -39,20 +39,26 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
   <form action="logic/buku/add.php" method="POST" id="form">
     <div class="w-full flex flex-wrap items-center mx-auto space-y-6">
       <div class="w-full flex items-center space-x-8">
+        <!-- Judul Buku -->
         <div class="w-6/12">
           <label for="judul" class="block mb-2 text-xl font-medium">Judul Buku</label>
           <input type="text" id='judul' name='judul' class="w-full p-3 px-4 text-black rounded-md border border-gray-400 focus:outline-purple-400 placeholder:text-sm" placeholder="Masukkan Judul Buku">
         </div>
+
+        <!-- Kategori -->
         <div class="w-6/12">
           <label for="kategori" class="block mb-2 text-xl font-medium">Kategori</label>
           <input type="text" id='kategori' name='kategori' class="w-full p-3 px-4 text-black rounded-md border border-gray-400 focus:outline-purple-400 placeholder:text-sm" placeholder="Masukkan Kategori">
         </div>
       </div>
       <div class="w-full flex items-center space-x-8">
+        <!-- Pengarang -->
         <div class="w-6/12">
           <label for="pengarang" class="block mb-2 text-xl font-medium">Pengarang</label>
           <input type="text" id='pengarang' name='pengarang' class="w-full p-3 px-4 text-black rounded-md border border-gray-400 focus:outline-purple-400 placeholder:text-sm" placeholder="Masukkan pengarang">
         </div>
+
+        <!-- Penerbit -->
         <div class="w-6/12">
           <label for="penerbit" class="block text-xl font-medium mb-2">Penerbit</label>
           <select name="penerbit" id="penerbit" class="w-full p-3 px-4 text-black rounded-md border border-gray-400 focus:outline-purple-400 placeholder:text-sm">
@@ -64,6 +70,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
           </select>
         </div>
       </div>
+
+      <!-- Status -->
       <div class="w-full">
         <label class="block text-xl font-medium mb-2">Status</label>
         <div class="flex items-center space-x-4 mb-4">
@@ -80,6 +88,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
             </label>
           </div>
         </div>
+      </div>
+
+      <div class="w-full text-center">
+        <?php if (!empty($_GET['error'])) : ?>
+          <div class="w-max mx-auto my-3 px-3 p-2 bg-[#ffd4d4] rounded text-center">
+            <span class="text-xl text-red-600"><?= $_GET['error'] ?></span>
+          </div>
+        <?php endif; ?>
       </div>
 
       <div class="w-full flex justify-end space-x-4">

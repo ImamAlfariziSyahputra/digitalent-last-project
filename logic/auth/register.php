@@ -50,7 +50,7 @@ if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
         $_SESSION['email'] = $row['email'];
         $_SESSION['name'] = $row['name'];
 
-        header("Location: ../../book.php"); //! Redirect to "Home Page"
+        header("Location: ../../index.php"); //! Redirect to "Home Page"
         exit();
       } else {
         header("Location: login.php?error=Login Otomatis Gagal, coba untuk lakukan login kembali!");

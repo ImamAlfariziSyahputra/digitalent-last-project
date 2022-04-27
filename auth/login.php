@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
-  header("Location: ../book.php"); //! if Authenticated, Redirect to "Home Page"
+  header("Location: ../index.php"); //! if Authenticated, Redirect to "Home Page"
   exit();
 }
 ?>

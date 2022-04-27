@@ -13,9 +13,9 @@
     <!-- End Side Logo -->
 
     <div class="flex flex-col space-y-4 px-6 pt-4">
-      <a href='#' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all active py-2 text-white hover:text-white">
+      <a href='index.php' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all active py-2 text-white hover:text-white">
         <div class="w-3/12 text-center">
-          <img src="icons/home-w.svg" alt="" class="inline-block w-6 h-6 group-hover:ml-4">
+          <img src="icons/home-w.svg" alt="Home Icon" class="inline-block w-6 h-6 group-hover:ml-4">
           <!-- <Icon class="!w-6 !h-6 group-hover:!ml-4" /> -->
         </div>
         <div class="w-9/12 pt-1">
@@ -23,8 +23,43 @@
         </div>
       </a>
       <div class="!mt-8">
-        <h1 class="uppercase text-secondary text-sm">Category</h1>
+        <h1 class="uppercase text-secondary text-sm">Master</h1>
       </div>
+      <a href='book.php' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all py-2 hover:bg-gray-100">
+        <div class="w-3/12 text-center">
+          <img src="icons/book-b.svg" alt="Book Icon" class="inline-block w-6 h-6 group-hover:ml-4">
+        </div>
+        <div class="w-9/12 pt-1">
+          Buku
+        </div>
+      </a>
+      <a href='anggota.php' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all py-2 hover:bg-gray-100">
+        <div class="w-3/12 text-center">
+          <img src="icons/anggota-b.svg" alt="Book Icon" class="inline-block w-6 h-6 group-hover:ml-4">
+        </div>
+        <div class="w-9/12 pt-1">
+          Anggota
+        </div>
+      </a>
+      <div class="!mt-8">
+        <h1 class="uppercase text-secondary text-sm">Transaksi</h1>
+      </div>
+      <a href='peminjaman.php' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all py-2 hover:bg-gray-100">
+        <div class="w-3/12 text-center">
+          <img src="icons/peminjaman-b.svg" alt="Book Icon" class="inline-block w-6 h-6 group-hover:ml-4">
+        </div>
+        <div class="w-9/12 pt-1">
+          Peminjaman
+        </div>
+      </a>
+      <a href='pengembalian.php' class="flex items-center rounded hover:cursor-pointer hover:text-hover group transition-all py-2 hover:bg-gray-100">
+        <div class="w-3/12 text-center">
+          <img src="icons/pengembalian-b.svg" alt="Book Icon" class="inline-block w-6 h-6 group-hover:ml-4">
+        </div>
+        <div class="w-9/12 pt-1">
+          Pengembalian
+        </div>
+      </a>
     </div>
   </div>
 </section>

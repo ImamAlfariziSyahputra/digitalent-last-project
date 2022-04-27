@@ -6,11 +6,11 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
   $search = !empty($_POST['search']) ? $_POST['search'] : '';
 
-  $searchQuery = "WHERE judul LIKE :search OR kategori LIKE :search OR pengarang LIKE :search OR penerbit LIKE :search OR status LIKE :search";
+  $searchQuery = "WHERE nama LIKE :search OR gender LIKE :search OR alamat LIKE :search OR status LIKE :search";
 
   $perPage = 5;
 
-  $sql = "SELECT count(*) FROM books $searchQuery";
+  $sql = "SELECT count(*) FROM anggota $searchQuery";
   $statement = $connection->prepare($sql);
   $statement->execute([':search' => "%$search%"]);
 
@@ -28,12 +28,12 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
   $startingLimits = ($currentPage - 1) * $perPage;
 
-  //* Query to fetch books
-  $sql = "SELECT * FROM books $searchQuery ORDER BY id DESC LIMIT $startingLimits,$perPage";
+  //* Query to fetch anggota
+  $sql = "SELECT * FROM anggota $searchQuery ORDER BY id DESC LIMIT $startingLimits,$perPage";
   $statement = $connection->prepare($sql);
   $statement->execute([':search' => "%$search%"]);
 
-  $books = $statement->fetchAll();
+  $anggotas = $statement->fetchAll();
   $rows = $statement->rowCount();
 } else {
   $alert = <<<ALERT
@@ -54,7 +54,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 <section>
   <div class="flex items-center mt-4">
     <h1 class="text-2xl pr-4">
-      List Buku
+      List Anggota
     </h1>
   </div>
 </section>
@@ -76,7 +76,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
         <img src="icons/print-w.svg" alt="Print Logo" class="w-4 h-4">
         <span>Cetak</span>
       </button>
-      <a href='book-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
+      <a href='anggota-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
         <img src="icons/plus-w.svg" alt="Plus Logo" class="w-4 h-4">
         <span>Tambah</span>
       </a>
@@ -84,7 +84,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
     <!-- END Add, Print Button -->
 
     <!-- Search Input -->
-    <form action="book.php" method="POST" class="flex items-center">
+    <form action="anggota.php" method="POST" class="flex items-center">
       <label for="search" class="sr-only">Search</label>
       <div class="relative w-full">
         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -106,19 +106,19 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
       <thead class="text-xs text-gray-700 uppercase bg-gray-200">
         <tr>
           <th scope="col" class="px-6 py-3">
-            Judul Buku
+            Nama
           </th>
           <th scope="col" class="px-6 py-3">
-            Kategori
+            Jenis Kelamin
           </th>
           <th scope="col" class="px-6 py-3">
-            Pengarang
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Penerbit
+            Alamat
           </th>
           <th scope="col" class="px-6 py-3">
             Status
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Foto
           </th>
           <!-- <th scope="col" class="px-6 py-3 text-center">
             Aksi
@@ -134,34 +134,34 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center" colspan="6">Data Tidak Ditemukan.</td>
           </tr>
         <?php else : ?>
-          <?php foreach ($books as $book) : ?>
+          <?php foreach ($anggotas as $anggota) : ?>
             <tr class="bg-white border-b">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['judul'] ?>
+                <?= $anggota['nama'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['kategori'] ?>
+                <?= $anggota['gender'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['pengarang'] ?>
+                <?= $anggota['alamat'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['penerbit'] ?>
+                <?= $anggota['status'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['status'] ?>
+                <img src="avatar/<?= $anggota['foto'] ?>" alt="Foto Anggota" class="inline-block w-16 h-16">
               </th>
               <td class="flex justify-content-evenly items-center space-x-1.5 py-4 px-6">
-                <button type="button" onclick="printSingle(<?= $book['id'] ?>)" class="bg-yellow-500 hover:bg-yellow-600 p-2.5 rounded font-medium text-white">
+                <button type="button" onclick="printSingle(<?= $anggota['id'] ?>)" class="shrink-0 bg-yellow-500 hover:bg-yellow-600 p-2.5 rounded font-medium text-white">
                   <img src="icons/print-w.svg" alt="Print Logo" class="w-5 h-5">
                 </button>
                 <span> - </span>
-                <a href="book-edit.php?id=<?= $book['id'] ?>" class="bg-green-600 hover:bg-green-700 p-2.5 rounded font-medium text-white">
+                <a href="anggota-edit.php?id=<?= $anggota['id'] ?>" class="shrink-0 bg-green-600 hover:bg-green-700 p-2.5 rounded font-medium text-white">
                   <img src="icons/edit-w.svg" alt="Edit Logo" class="w-5 h-5">
                 </a>
                 <span> - </span>
-                <form action="logic/buku/delete.php" method="POST" class='m-0'>
-                  <input type="text" class='hidden' name='id' value='<?= $book['id'] ?>'>
+                <form action="logic/anggota/delete.php" method="POST" class='shrink-0 m-0'>
+                  <input type="text" class='hidden' name='id' value='<?= $anggota['id'] ?>'>
                   <button type="submit" onclick="return confirm(' Apakah yakin data akan di hapus?')" class="block bg-red-600 hover:bg-red-700 p-2.5 rounded font-medium text-white">
                     <img src="icons/trash-w.svg" alt="Remove Logo" class="w-5 h-5">
                   </button>
@@ -229,13 +229,13 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
 <script>
   function printAll() {
-    let printWindow = window.open('http://localhost:3000/project/tugas-akhir/print/book-all.php', '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+    let printWindow = window.open('http://localhost:3000/project/tugas-akhir/print/anggota-all.php', '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
 
     printWindow.print();
   }
 
   function printSingle(id) {
-    let printWindow = window.open(`http://localhost:3000/project/tugas-akhir/print/book-single.php?id=${id}`, '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+    let printWindow = window.open(`http://localhost:3000/project/tugas-akhir/print/anggota-single.php?id=${id}`, '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
 
     printWindow.print();
   }

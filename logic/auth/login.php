@@ -37,7 +37,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         $_SESSION['email'] = $row['email'];
         $_SESSION['name'] = $row['name'];
 
-        header("Location: ../../book.php"); //! Redirect to "Home Page"
+        header("Location: ../../index.php"); //! Redirect to "Home Page"
         exit();
       } else {
         header("Location: login.php?error=Email atau Password tidak ditemukan!");

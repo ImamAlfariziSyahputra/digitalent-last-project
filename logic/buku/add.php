@@ -2,6 +2,23 @@
 session_start();
 
 require_once __DIR__ . '/../../db-config.php';
+require_once __DIR__ . '/../requiredFunction.php';
+
+if (empty($_POST['judul'])) {
+  required(name: 'Judul', file: 'book-add');
+}
+if (empty($_POST['kategori'])) {
+  required(name: 'Kategori', file: 'book-add');
+}
+if (empty($_POST['pengarang'])) {
+  required(name: 'Pengarang', file: 'book-add');
+}
+if (empty($_POST['penerbit'])) {
+  required(name: 'Penerbit', file: 'book-add');
+}
+if (empty($_POST['status'])) {
+  required(name: 'Status', file: 'book-add');
+}
 
 $judul = $_POST['judul'];
 $kategori = $_POST['kategori'];

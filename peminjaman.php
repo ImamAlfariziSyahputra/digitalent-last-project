@@ -6,16 +6,27 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
   $search = !empty($_POST['search']) ? $_POST['search'] : '';
 
-  $searchQuery = "WHERE judul LIKE :search OR kategori LIKE :search OR pengarang LIKE :search OR penerbit LIKE :search OR status LIKE :search";
+  $searchQuery = <<<SEARCHQUERY
+    WHERE anggota.nama LIKE :search
+    OR books.judul LIKE :search
+    OR peminjaman.tgl_pinjam LIKE :search
+    OR peminjaman.tgl_kembali LIKE :search
+  SEARCHQUERY;
 
   $perPage = 5;
 
-  $sql = "SELECT count(*) FROM books $searchQuery";
+  //* Count Total Data Peminjaman
+  $sql = <<<SQL
+    SELECT count(*) as total FROM peminjaman
+    INNER JOIN anggota ON peminjaman.anggota_id = anggota.id
+    INNER JOIN books ON peminjaman.book_id = books.id
+    $searchQuery
+  SQL;
   $statement = $connection->prepare($sql);
   $statement->execute([':search' => "%$search%"]);
-
-  //* Calculate Total pages
   $totalResults = $statement->fetchColumn();
+
+  //* Total Pages
   //! if no result set Total Page to 1 (not Zero)
   $totalPages = ceil($totalResults / $perPage) != 0 ? ceil($totalResults / $perPage) : 1;
 
@@ -28,12 +39,21 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
   $startingLimits = ($currentPage - 1) * $perPage;
 
-  //* Query to fetch books
-  $sql = "SELECT * FROM books $searchQuery ORDER BY id DESC LIMIT $startingLimits,$perPage";
+  //* Query to fetch peminjaman
+  $sql = <<<SQL
+    SELECT peminjaman.*, 
+    anggota.nama as anggota, 
+    books.judul as buku 
+    FROM peminjaman 
+    INNER JOIN anggota ON peminjaman.anggota_id = anggota.id
+    INNER JOIN books ON peminjaman.book_id = books.id
+    $searchQuery
+    ORDER BY peminjaman.id DESC 
+    LIMIT $startingLimits,$perPage;
+  SQL;
   $statement = $connection->prepare($sql);
   $statement->execute([':search' => "%$search%"]);
-
-  $books = $statement->fetchAll();
+  $peminjamans = $statement->fetchAll();
   $rows = $statement->rowCount();
 } else {
   $alert = <<<ALERT
@@ -54,7 +74,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 <section>
   <div class="flex items-center mt-4">
     <h1 class="text-2xl pr-4">
-      List Buku
+      List Peminjaman
     </h1>
   </div>
 </section>
@@ -76,7 +96,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
         <img src="icons/print-w.svg" alt="Print Logo" class="w-4 h-4">
         <span>Cetak</span>
       </button>
-      <a href='book-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
+      <a href='peminjaman-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
         <img src="icons/plus-w.svg" alt="Plus Logo" class="w-4 h-4">
         <span>Tambah</span>
       </a>
@@ -84,7 +104,7 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
     <!-- END Add, Print Button -->
 
     <!-- Search Input -->
-    <form action="book.php" method="POST" class="flex items-center">
+    <form action="peminjaman.php" method="POST" class="flex items-center">
       <label for="search" class="sr-only">Search</label>
       <div class="relative w-full">
         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -106,19 +126,16 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
       <thead class="text-xs text-gray-700 uppercase bg-gray-200">
         <tr>
           <th scope="col" class="px-6 py-3">
-            Judul Buku
+            Anggota
           </th>
           <th scope="col" class="px-6 py-3">
-            Kategori
+            Buku
           </th>
           <th scope="col" class="px-6 py-3">
-            Pengarang
+            Tanggal Pinjam
           </th>
           <th scope="col" class="px-6 py-3">
-            Penerbit
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Status
+            Tanggal Kembali
           </th>
           <!-- <th scope="col" class="px-6 py-3 text-center">
             Aksi
@@ -134,38 +151,53 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center" colspan="6">Data Tidak Ditemukan.</td>
           </tr>
         <?php else : ?>
-          <?php foreach ($books as $book) : ?>
+          <?php foreach ($peminjamans as $peminjaman) : ?>
             <tr class="bg-white border-b">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['judul'] ?>
+                <?= $peminjaman['anggota'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['kategori'] ?>
+                <?= $peminjaman['buku'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['pengarang'] ?>
+                <?= $peminjaman['tgl_pinjam'] ?>
               </th>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['penerbit'] ?>
+                <?= $peminjaman['tgl_kembali'] ?>
               </th>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <?= $book['status'] ?>
-              </th>
+
+              <!-- Action Buttons -->
               <td class="flex justify-content-evenly items-center space-x-1.5 py-4 px-6">
-                <button type="button" onclick="printSingle(<?= $book['id'] ?>)" class="bg-yellow-500 hover:bg-yellow-600 p-2.5 rounded font-medium text-white">
+
+                <button type="button" onclick="printSingle(<?= $peminjaman['id'] ?>)" class="bg-yellow-500 hover:bg-yellow-600 p-2.5 rounded font-medium text-white">
                   <img src="icons/print-w.svg" alt="Print Logo" class="w-5 h-5">
                 </button>
                 <span> - </span>
-                <a href="book-edit.php?id=<?= $book['id'] ?>" class="bg-green-600 hover:bg-green-700 p-2.5 rounded font-medium text-white">
+
+                <a href="peminjaman-edit.php?id=<?= $peminjaman['id'] ?>" class="bg-green-600 hover:bg-green-700 p-2.5 rounded font-medium text-white">
                   <img src="icons/edit-w.svg" alt="Edit Logo" class="w-5 h-5">
                 </a>
                 <span> - </span>
-                <form action="logic/buku/delete.php" method="POST" class='m-0'>
-                  <input type="text" class='hidden' name='id' value='<?= $book['id'] ?>'>
-                  <button type="submit" onclick="return confirm(' Apakah yakin data akan di hapus?')" class="block bg-red-600 hover:bg-red-700 p-2.5 rounded font-medium text-white">
+
+                <form action="logic/peminjaman/delete.php" method="POST" class='m-0'>
+                  <input type="text" class='hidden' name='id' value='<?= $peminjaman['id'] ?>'>
+                  <button type="submit" onclick="return confirm('Apakah yakin data akan di hapus?')" class="block bg-red-600 hover:bg-red-700 p-2.5 rounded font-medium text-white">
                     <img src="icons/trash-w.svg" alt="Remove Logo" class="w-5 h-5">
                   </button>
                 </form>
+                <span> - </span>
+
+                <form action="logic/peminjaman/kembalikan.php" method="POST" class='m-0'>
+                  <input type="text" class='hidden' name='id' value='<?= $peminjaman['id'] ?>'>
+                  <input type="text" class='hidden' name='anggota_id' value='<?= $peminjaman['anggota_id'] ?>'>
+                  <input type="text" class='hidden' name='book_id' value='<?= $peminjaman['book_id'] ?>'>
+                  <input type="text" class='hidden' name='tgl_pinjam' value='<?= $peminjaman['tgl_pinjam'] ?>'>
+                  <input type="text" class='hidden' name='tgl_kembali' value='<?= $peminjaman['tgl_kembali'] ?>'>
+                  <button type="submit" onclick="return confirm('Yakin ingin Mengambalikan Buku?')" class="bg-blue-600 hover:bg-blue-700 p-2.5 rounded font-medium text-white font-semibold">
+                    Kembalikan
+                  </button>
+                </form>
+
               </td>
             </tr>
           <?php endforeach; ?>
@@ -229,13 +261,13 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
 
 <script>
   function printAll() {
-    let printWindow = window.open('http://localhost:3000/project/tugas-akhir/print/book-all.php', '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+    let printWindow = window.open('http://localhost:3000/project/tugas-akhir/print/peminjaman-all.php', '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
 
     printWindow.print();
   }
 
   function printSingle(id) {
-    let printWindow = window.open(`http://localhost:3000/project/tugas-akhir/print/book-single.php?id=${id}`, '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
+    let printWindow = window.open(`http://localhost:3000/project/tugas-akhir/print/peminjaman-single.php?id=${id}`, '_blank', `width=${screen.availWidth}`, `height=${screen.availHeight}`);
 
     printWindow.print();
   }

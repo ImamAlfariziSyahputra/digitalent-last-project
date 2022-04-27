@@ -4,11 +4,11 @@ session_start();
 if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
   require_once __DIR__ . '/../db-config.php';
 
-  $sql = "SELECT * FROM books ORDER BY id DESC";
+  $sql = "SELECT * FROM anggota ORDER BY id DESC";
   $statement = $connection->prepare($sql);
   $statement->execute();
 
-  $books = $statement->fetchAll();
+  $anggota = $statement->fetchAll();
 } else {
   $alert = <<<ALERT
     <script>
@@ -70,21 +70,21 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
     <table cellspacing="0" rules="all" border="1">
       <tr>
         <th>No.</th>
-        <th>Judul Buku</th>
-        <th>Kategori</th>
-        <th>Pengarang</th>
-        <th>Penerbit</th>
+        <th>Nama</th>
+        <th>Jenis Kelamin</th>
+        <th>Alamat</th>
         <th>Status</th>
+        <th>Foto</th>
       </tr>
       <?php $i = 1; ?>
-      <?php foreach ($books as $book) : ?>
+      <?php foreach ($anggota as $anggota) : ?>
         <tr>
           <td><?= $i++ ?></td>
-          <td><?= $book['judul'] ?></td>
-          <td><?= $book['kategori'] ?></td>
-          <td><?= $book['pengarang'] ?></td>
-          <td><?= $book['penerbit'] ?></td>
-          <td><?= $book['status'] ?></td>
+          <td><?= $anggota['nama'] ?></td>
+          <td><?= $anggota['gender'] ?></td>
+          <td><?= $anggota['alamat'] ?></td>
+          <td><?= $anggota['status'] ?></td>
+          <td><?= $anggota['foto'] ?></td>
         </tr>
       <?php endforeach; ?>
     </table>
