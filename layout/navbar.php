@@ -1,13 +1,17 @@
 <section class="sticky top-0 bg-secondary pt-4 z-10">
   <div class="flex items-center justify-between bg-white rounded p-4 shadow-lg border">
     <div class="flex items-center space-x-4">
-      <div class="flex items-center space-x-1">
+      <div class="block xl:hidden shrink-0 hover:cursor-pointer" onclick="toggleSidebar(event)">
+        <img src='icons/menu-b.svg' alt='Logo Copyright' id='menu-burger' class='inline-block h-6 w-6' />
+      </div>
+      <span class="block xl:hidden">|</span>
+      <div class="hidden sm:flex items-center space-x-1">
         <img src='icons/copyright-b.svg' alt='Logo Copyright' class='inline-block h-6 w-6' />
         <p class="text-sm"><span class="font-medium">Imam Alfarizi Syahputra</span> - JWD 3</p>
       </div>
-      <span>|</span>
-      <span class="text-sm font-medium">My Contact : </span>
-      <div class="flex items-center space-x-4">
+      <span class="hidden md:block">|</span>
+      <span class="hidden lg:block text-sm font-medium">My Contact : </span>
+      <div class="flex sm:hidden md:flex items-center space-x-4">
         <a href="https://github.com/ImamAlfariziSyahputra" target="_blank" class="inline-block">
           <img src='icons/github-b.svg' alt='Logo Github' class='inline-block h-6 w-6 hover:text-hover hover:cursor-pointer' />
         </a>
@@ -24,9 +28,9 @@
     </div>
 
     <div class="flex items-center space-x-2">
-      <a href="auth/logout.php" class="inline-block border-x border-gray-400 mr-2 px-3 hover:text-hover hover:cursor-pointer">
+      <a href="auth/logout.php" class="inline-block shrink-0 border-x border-gray-400 mr-2 px-3 hover:text-hover hover:cursor-pointer">
         <img src="icons/logout-b.svg" alt="Logo Logout" class='inline-block h-6 w-6'>
-        <span>Logout</span>
+        <span class="hidden lg:inline">Logout</span>
       </a>
       <div>
         <h4 class="text-sm font-medium"><?= $_SESSION['name'] ?></h4>

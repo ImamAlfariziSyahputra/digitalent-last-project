@@ -76,14 +76,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
         <label class="block text-xl font-medium mb-2">Status</label>
         <div class="flex items-center space-x-4 mb-4">
           <div class="flex items-center">
-            <input id="status-1" type="radio" name="status" value="Tersedia" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-600">
-            <label for="status-1" class="block ml-2 text-sm font-medium text-gray-900">
+            <input id="status-1" type="radio" name="status" value="Tersedia" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-purple-300 disabled:bg-blue-500 cursor-not-allowed" checked>
+            <label for="status-1" class="block ml-2 text-sm font-medium text-gray-900 cursor-not-allowed">
               Tersedia
             </label>
           </div>
           <div class="flex items-center">
-            <input id="status-2" type="radio" name="status" value="Dipinjam" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-600">
-            <label for="status-2" class="block ml-2 text-sm font-medium text-gray-900">
+            <input id="status-2" type="radio" name="status" value="Dipinjam" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-purple-300 cursor-not-allowed" disabled>
+            <label for="status-2" class="block ml-2 text-sm font-medium text-gray-900 cursor-not-allowed">
               Dipinjam
             </label>
           </div>

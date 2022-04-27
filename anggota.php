@@ -70,15 +70,15 @@ if (!empty($_SESSION['id']) && !empty($_SESSION['email'])) {
     <div class="flex items-center justify-end space-x-3">
       <a href='' class="flex space-x-2 items-center bg-green-500 hover:bg-green-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
         <img src="icons/refresh-w.svg" alt="Refresh Logo" class="w-4 h-4">
-        <span>Refresh</span>
+        <span class='hidden md:block'>Refresh</span>
       </a>
       <button type='button' onclick="printAll();" class="flex space-x-2 items-center bg-yellow-500 hover:bg-yellow-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
         <img src="icons/print-w.svg" alt="Print Logo" class="w-4 h-4">
-        <span>Cetak</span>
+        <span class='hidden md:block'>Cetak</span>
       </button>
       <a href='anggota-add.php' class="flex space-x-2 items-center bg-blue-500 hover:bg-blue-800 text-white p-2.5 px-4 rounded-lg shadow-md hover:shadow-none font-bold mb-4">
         <img src="icons/plus-w.svg" alt="Plus Logo" class="w-4 h-4">
-        <span>Tambah</span>
+        <span class='hidden md:block'>Tambah</span>
       </a>
     </div>
     <!-- END Add, Print Button -->

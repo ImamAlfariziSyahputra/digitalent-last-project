@@ -77,11 +77,11 @@ if (isset($_SESSION['id']) && isset($_SESSION['email'])) {
           <form action="../logic/auth/login.php" method='POST' class="flex flex-col space-y-3">
             <div>
               <label for="email" class="block">E-mail</label>
-              <input type="text" id='email' name='email' class="w-full p-2 px-4 text-black rounded-md focus:outline-cyan-500 placeholder:text-sm" placeholder="Masukkan Email">
+              <input type="text" id='email' name='email' class="w-full p-2 px-4 text-black rounded-md focus:outline-cyan-500 placeholder:text-sm" placeholder="Masukkan Email" value='asd@gmail.com'>
             </div>
             <div>
               <label for="password" class="block">Password</label>
-              <input type="password" id='password' name='password' class="w-full p-2 px-4 text-black rounded-md focus:outline-cyan-500 placeholder:text-sm" placeholder="Masukkan Password">
+              <input type="password" id='password' name='password' class="w-full p-2 px-4 text-black rounded-md focus:outline-cyan-500 placeholder:text-sm" placeholder="Masukkan Password" value='asd'>
             </div>
             <?php if (isset($_GET['error'])) : ?>
               <div class="bg-[#ffd4d4] p-2 rounded text-center">
